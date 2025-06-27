@@ -1,0 +1,3500 @@
+{
+ "Resources": {
+  "DatabasedeviceC292B687": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "device"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Database/device/Resource"
+   }
+  },
+  "Databaselocation07F1849C": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "deviceId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "deviceId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "timestamp",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "location"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Database/location/Resource"
+   }
+  },
+  "DatabasetrackD66F6DFE": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "deviceId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "trackDate",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "deviceId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "trackDate",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "track"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Database/track/Resource"
+   }
+  },
+  "Databaseconnections063A91AB": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "deviceId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "deviceId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "connections",
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Database/connections/Resource"
+   }
+  },
+  "MicroservicesdeviceLambdaFunctionServiceRole2D77B8EA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/ServiceRole/Resource"
+   }
+  },
+  "MicroservicesdeviceLambdaFunctionServiceRoleDefaultPolicy484F0A51": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DatabasedeviceC292B687",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MicroservicesdeviceLambdaFunctionServiceRoleDefaultPolicy484F0A51",
+    "Roles": [
+     {
+      "Ref": "MicroservicesdeviceLambdaFunctionServiceRole2D77B8EA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "MicroservicesdeviceLambdaFunction2A4DADA7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "b7a473a32e1f89124752cdb909015a33d47090fa5f9a459ef5bbd3c6b822c03f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PRIMARY_KEY": "id",
+      "DYNAMODB_TABLE_NAME": {
+       "Ref": "DatabasedeviceC292B687"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunctionServiceRole2D77B8EA",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "MicroservicesdeviceLambdaFunctionServiceRoleDefaultPolicy484F0A51",
+    "MicroservicesdeviceLambdaFunctionServiceRole2D77B8EA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/Resource",
+    "aws:asset:path": "asset.b7a473a32e1f89124752cdb909015a33d47090fa5f9a459ef5bbd3c6b822c03f",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MicroserviceslocationLambdaFunctionServiceRole2F745FFD": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/ServiceRole/Resource"
+   }
+  },
+  "MicroserviceslocationLambdaFunctionServiceRoleDefaultPolicy5D66E4AF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "Databaseconnections063A91AB",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "Databaselocation07F1849C",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": "execute-api:ManageConnections",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:execute-api:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":*/*/*/@connections/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "events:PutEvents",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "LockeyEventBus7540F85B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MicroserviceslocationLambdaFunctionServiceRoleDefaultPolicy5D66E4AF",
+    "Roles": [
+     {
+      "Ref": "MicroserviceslocationLambdaFunctionServiceRole2F745FFD"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "MicroserviceslocationLambdaFunction7C8C211F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "400557f8485db97e3497e4fc4d784c9af306bb2cfe635631e747315d7ee0a05d.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PRIMARY_KEY": "deviceId",
+      "DYNAMODB_TABLE_NAME": {
+       "Ref": "Databaselocation07F1849C"
+      },
+      "EVENT_SOURCE": "com.lockey.location.trackLocation",
+      "EVENT_DETAILTYPE": "TrackLocation",
+      "EVENT_BUSNAME": "LockeyEventBus",
+      "CONNECTIONS_TABLE": {
+       "Ref": "Databaseconnections063A91AB"
+      },
+      "WEBSOCKET_API_ENDPOINT": {
+       "Fn::Join": [
+        "",
+        [
+         "wss://",
+         {
+          "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+         },
+         ".execute-api.",
+         {
+          "Ref": "AWS::Region"
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/prod"
+        ]
+       ]
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunctionServiceRole2F745FFD",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "MicroserviceslocationLambdaFunctionServiceRoleDefaultPolicy5D66E4AF",
+    "MicroserviceslocationLambdaFunctionServiceRole2F745FFD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/Resource",
+    "aws:asset:path": "asset.400557f8485db97e3497e4fc4d784c9af306bb2cfe635631e747315d7ee0a05d",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MicroserviceslocationLambdaFunctionIotInvokePermission78000367": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "iot.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "IotCoreLocationUpdateRuleA0125FF4",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/IotInvokePermission"
+   }
+  },
+  "MicroservicestrackLambdaFunctionServiceRoleAD3A11C9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/ServiceRole/Resource"
+   }
+  },
+  "MicroservicestrackLambdaFunctionServiceRoleDefaultPolicy2262FF23": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DatabasetrackD66F6DFE",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ReceiveMessage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "QueueTrackQueue9692FF45",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MicroservicestrackLambdaFunctionServiceRoleDefaultPolicy2262FF23",
+    "Roles": [
+     {
+      "Ref": "MicroservicestrackLambdaFunctionServiceRoleAD3A11C9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "MicroservicestrackLambdaFunction710B6130": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "263fbbe30f8346d3edfcadd7ade73c4fc722f958411490ee7fa3ba6fb8e47e49.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PRIMARY_KEY": "deviceId",
+      "SORT_KEY": "trackDate",
+      "DYNAMODB_TABLE_NAME": {
+       "Ref": "DatabasetrackD66F6DFE"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "MicroservicestrackLambdaFunctionServiceRoleAD3A11C9",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "MicroservicestrackLambdaFunctionServiceRoleDefaultPolicy2262FF23",
+    "MicroservicestrackLambdaFunctionServiceRoleAD3A11C9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/Resource",
+    "aws:asset:path": "asset.263fbbe30f8346d3edfcadd7ade73c4fc722f958411490ee7fa3ba6fb8e47e49",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MicroservicestrackLambdaFunctionSqsEventSourceAwsLockeyServerlessMicroserviceStackQueueTrackQueue1D83A741E10FFEC2": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "BatchSize": 1,
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "QueueTrackQueue9692FF45",
+      "Arn"
+     ]
+    },
+    "FunctionName": {
+     "Ref": "MicroservicestrackLambdaFunction710B6130"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/SqsEventSource:AwsLockeyServerlessMicroserviceStackQueueTrackQueue1D83A741/Resource"
+   }
+  },
+  "MicroserviceswebSocketHandlerServiceRole47DC925D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/ServiceRole/Resource"
+   }
+  },
+  "MicroserviceswebSocketHandlerServiceRoleDefaultPolicy081297A1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "Databaseconnections063A91AB",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "DatabasedeviceC292B687",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "Databaselocation07F1849C",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "DatabasetrackD66F6DFE",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MicroserviceswebSocketHandlerServiceRoleDefaultPolicy081297A1",
+    "Roles": [
+     {
+      "Ref": "MicroserviceswebSocketHandlerServiceRole47DC925D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "MicroserviceswebSocketHandlerA94BCA16": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "9bde6e2b143ae0f7136552b90820d8e256d02bb1a68ec433fedbf30106a84d26.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "DEVICE_TABLE_NAME": {
+       "Ref": "DatabasedeviceC292B687"
+      },
+      "LOCATION_TABLE_NAME": {
+       "Ref": "Databaselocation07F1849C"
+      },
+      "TRACK_TABLE_NAME": {
+       "Ref": "DatabasetrackD66F6DFE"
+      },
+      "CONNECTION_TABLE_NAME": {
+       "Ref": "Databaseconnections063A91AB"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "MicroserviceswebSocketHandlerServiceRole47DC925D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "MicroserviceswebSocketHandlerServiceRoleDefaultPolicy081297A1",
+    "MicroserviceswebSocketHandlerServiceRole47DC925D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/Resource",
+    "aws:asset:path": "asset.9bde6e2b143ae0f7136552b90820d8e256d02bb1a68ec433fedbf30106a84d26",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MicroservicesIotTestClientServiceRoleCC97FEF4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/ServiceRole/Resource"
+   }
+  },
+  "MicroservicesIotTestClientServiceRoleDefaultPolicy17D3E926": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "iot:Publish",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MicroservicesIotTestClientServiceRoleDefaultPolicy17D3E926",
+    "Roles": [
+     {
+      "Ref": "MicroservicesIotTestClientServiceRoleCC97FEF4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "MicroservicesIotTestClient9E506F1D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "26a0050885ee7d9a6e7f72444345edfd640525f1761fa633ca1e831d66eb684e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "IOT_ENDPOINT": {
+       "Fn::Join": [
+        "",
+        [
+         "https://",
+         {
+          "Ref": "AWS::AccountId"
+         },
+         ".iot.",
+         {
+          "Ref": "AWS::Region"
+         },
+         ".amazonaws.com"
+        ]
+       ]
+      },
+      "IOT_TOPIC": "device/coordinates",
+      "TRACK_TABLE_NAME": {
+       "Ref": "Databaseconnections063A91AB"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "MicroservicesIotTestClientServiceRoleCC97FEF4",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "MicroservicesIotTestClientServiceRoleDefaultPolicy17D3E926",
+    "MicroservicesIotTestClientServiceRoleCC97FEF4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/Resource",
+    "aws:asset:path": "asset.26a0050885ee7d9a6e7f72444345edfd640525f1761fa633ca1e831d66eb684e",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApi1BA94B24": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "Name": "LockeyWebSocketService",
+    "ProtocolType": "WEBSOCKET",
+    "RouteSelectionExpression": "$request.body.action"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApiconnectRouteConnectIntegrationPermission3739D7E6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceswebSocketHandlerA94BCA16",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+       },
+       "/*$connect"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/ConnectIntegration-Permission"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApiconnectRouteConnectIntegrationAED4084E": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":apigateway:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "MicroserviceswebSocketHandlerA94BCA16",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/ConnectIntegration/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApiconnectRoute6BD1C211": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$connect",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApiconnectRouteConnectIntegrationAED4084E"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidisconnectRouteDisconnectIntegrationPermissionF042766D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceswebSocketHandlerA94BCA16",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+       },
+       "/*$disconnect"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/DisconnectIntegration-Permission"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidisconnectRouteDisconnectIntegration4F1A53FB": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":apigateway:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "MicroserviceswebSocketHandlerA94BCA16",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/DisconnectIntegration/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidisconnectRoute20988EC9": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$disconnect",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApidisconnectRouteDisconnectIntegration4F1A53FB"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidefaultRouteDefaultIntegrationPermission50768309": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceswebSocketHandlerA94BCA16",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+       },
+       "/*$default"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/DefaultIntegration-Permission"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidefaultRouteDefaultIntegrationD382C121": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":apigateway:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "MicroserviceswebSocketHandlerA94BCA16",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/DefaultIntegration/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketApidefaultRoute6A548964": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$default",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ApiGatewayLockeyWebSocketApidefaultRouteDefaultIntegrationD382C121"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/Resource"
+   }
+  },
+  "ApiGatewayLockeyWebSocketStage0BB2D50A": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+    },
+    "AutoDeploy": true,
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketStage/Resource"
+   }
+  },
+  "ApiGatewaylocationApi03E9C373": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "Location Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Resource"
+   }
+  },
+  "ApiGatewaylocationApiDeployment9868A005cd40792604effa33da3d0c674572ca3c": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "DependsOn": [
+    "ApiGatewaylocationApilocationdeviceIdGET4A4E84FB",
+    "ApiGatewaylocationApilocationdeviceIdF3F64C2A",
+    "ApiGatewaylocationApilocationGET8A02AA3C",
+    "ApiGatewaylocationApilocationBF0F2D24",
+    "ApiGatewaylocationApilocationtrackdeviceIdPOST7BFC0001",
+    "ApiGatewaylocationApilocationtrackdeviceIdFF52816E",
+    "ApiGatewaylocationApilocationtrackCA95F214"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Deployment/Resource"
+   }
+  },
+  "ApiGatewaylocationApiDeploymentStageprod7E0B9596": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ApiGatewaylocationApiDeployment9868A005cd40792604effa33da3d0c674572ca3c"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationBF0F2D24": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiGatewaylocationApi03E9C373",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "location",
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocation91F50779": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaylocationApiDeploymentStageprod7E0B9596"
+       },
+       "/GET/location"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location"
+   }
+  },
+  "ApiGatewaylocationApilocationGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocation59935677": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/test-invoke-stage/GET/location"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location"
+   }
+  },
+  "ApiGatewaylocationApilocationGET8A02AA3C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroserviceslocationLambdaFunction7C8C211F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaylocationApilocationBF0F2D24"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationdeviceIdF3F64C2A": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaylocationApilocationBF0F2D24"
+    },
+    "PathPart": "{deviceId}",
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationdeviceIdGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocationdeviceIdA9E4200C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaylocationApiDeploymentStageprod7E0B9596"
+       },
+       "/GET/location/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location.{deviceId}"
+   }
+  },
+  "ApiGatewaylocationApilocationdeviceIdGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocationdeviceIdB5F71054": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/test-invoke-stage/GET/location/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location.{deviceId}"
+   }
+  },
+  "ApiGatewaylocationApilocationdeviceIdGET4A4E84FB": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroserviceslocationLambdaFunction7C8C211F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaylocationApilocationdeviceIdF3F64C2A"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationtrackCA95F214": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaylocationApilocationBF0F2D24"
+    },
+    "PathPart": "track",
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationtrackdeviceIdFF52816E": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaylocationApilocationtrackCA95F214"
+    },
+    "PathPart": "{deviceId}",
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/Resource"
+   }
+  },
+  "ApiGatewaylocationApilocationtrackdeviceIdPOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BPOSTlocationtrackdeviceId3D4F2BA2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaylocationApiDeploymentStageprod7E0B9596"
+       },
+       "/POST/location/track/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.POST..location.track.{deviceId}"
+   }
+  },
+  "ApiGatewaylocationApilocationtrackdeviceIdPOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BPOSTlocationtrackdeviceIdAE9DA46B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroserviceslocationLambdaFunction7C8C211F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaylocationApi03E9C373"
+       },
+       "/test-invoke-stage/POST/location/track/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.POST..location.track.{deviceId}"
+   }
+  },
+  "ApiGatewaylocationApilocationtrackdeviceIdPOST7BFC0001": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroserviceslocationLambdaFunction7C8C211F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaylocationApilocationtrackdeviceIdFF52816E"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaylocationApi03E9C373"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/Resource"
+   }
+  },
+  "ApiGatewaydeviceApi9AD61ADB": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "Device Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Resource"
+   }
+  },
+  "ApiGatewaydeviceApiDeployment3CBF636E854e0ff4402117f6a1f13f0cf9b697ac": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "DependsOn": [
+    "ApiGatewaydeviceApideviceidDELETE342A0A4F",
+    "ApiGatewaydeviceApideviceidGETDE2EEB5A",
+    "ApiGatewaydeviceApideviceidPUT9EE09469",
+    "ApiGatewaydeviceApideviceid37EF0CE4",
+    "ApiGatewaydeviceApideviceGETF4B3BFDF",
+    "ApiGatewaydeviceApidevicePOST2A88244E",
+    "ApiGatewaydeviceApideviceF4820717"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Deployment/Resource"
+   }
+  },
+  "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ApiGatewaydeviceApiDeployment3CBF636E854e0ff4402117f6a1f13f0cf9b697ac"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceF4820717": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiGatewaydeviceApi9AD61ADB",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "device",
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdevice9F66EF7D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+       },
+       "/GET/device"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device"
+   }
+  },
+  "ApiGatewaydeviceApideviceGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceEBE3E770": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/test-invoke-stage/GET/device"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device"
+   }
+  },
+  "ApiGatewaydeviceApideviceGETF4B3BFDF": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesdeviceLambdaFunction2A4DADA7",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaydeviceApideviceF4820717"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/Resource"
+   }
+  },
+  "ApiGatewaydeviceApidevicePOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48POSTdevice7395DA34": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+       },
+       "/POST/device"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.POST..device"
+   }
+  },
+  "ApiGatewaydeviceApidevicePOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48POSTdeviceCDEEE94E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/test-invoke-stage/POST/device"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.POST..device"
+   }
+  },
+  "ApiGatewaydeviceApidevicePOST2A88244E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesdeviceLambdaFunction2A4DADA7",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaydeviceApideviceF4820717"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceid37EF0CE4": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaydeviceApideviceF4820717"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceidGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceid6AEA2B6E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+       },
+       "/GET/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceidB81C87D8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/test-invoke-stage/GET/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidGETDE2EEB5A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesdeviceLambdaFunction2A4DADA7",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaydeviceApideviceid37EF0CE4"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceidPUTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48PUTdeviceid6D404E49": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+       },
+       "/PUT/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.PUT..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidPUTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48PUTdeviceidDDF09360": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/test-invoke-stage/PUT/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.PUT..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidPUT9EE09469": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesdeviceLambdaFunction2A4DADA7",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaydeviceApideviceid37EF0CE4"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/Resource"
+   }
+  },
+  "ApiGatewaydeviceApideviceidDELETEApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48DELETEdeviceid0A91FA61": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+       },
+       "/DELETE/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.DELETE..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidDELETEApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48DELETEdeviceidAE447646": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesdeviceLambdaFunction2A4DADA7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaydeviceApi9AD61ADB"
+       },
+       "/test-invoke-stage/DELETE/device/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.DELETE..device.{id}"
+   }
+  },
+  "ApiGatewaydeviceApideviceidDELETE342A0A4F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesdeviceLambdaFunction2A4DADA7",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaydeviceApideviceid37EF0CE4"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaydeviceApi9AD61ADB"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/Resource"
+   }
+  },
+  "ApiGatewaytrackApi92FAFA5B": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "Track Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Resource"
+   }
+  },
+  "ApiGatewaytrackApiDeploymentA2A47FB42de7a24c9de662ca9651be30a04977e3": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    }
+   },
+   "DependsOn": [
+    "ApiGatewaytrackApitrackdeviceIdGET81C31EE1",
+    "ApiGatewaytrackApitrackdeviceId5D24B948",
+    "ApiGatewaytrackApitrackGET5D34522A",
+    "ApiGatewaytrackApitrackD8B656BC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Deployment/Resource"
+   }
+  },
+  "ApiGatewaytrackApiDeploymentStageprod4EE06132": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ApiGatewaytrackApiDeploymentA2A47FB42de7a24c9de662ca9651be30a04977e3"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ApiGatewaytrackApitrackD8B656BC": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiGatewaytrackApi92FAFA5B",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "track",
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/Resource"
+   }
+  },
+  "ApiGatewaytrackApitrackGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackCD0D7A43": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicestrackLambdaFunction710B6130",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytrackApi92FAFA5B"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaytrackApiDeploymentStageprod4EE06132"
+       },
+       "/GET/track"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track"
+   }
+  },
+  "ApiGatewaytrackApitrackGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackA7DF5789": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicestrackLambdaFunction710B6130",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytrackApi92FAFA5B"
+       },
+       "/test-invoke-stage/GET/track"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track"
+   }
+  },
+  "ApiGatewaytrackApitrackGET5D34522A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicestrackLambdaFunction710B6130",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaytrackApitrackD8B656BC"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/Resource"
+   }
+  },
+  "ApiGatewaytrackApitrackdeviceId5D24B948": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaytrackApitrackD8B656BC"
+    },
+    "PathPart": "{deviceId}",
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/Resource"
+   }
+  },
+  "ApiGatewaytrackApitrackdeviceIdGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackdeviceIdBDE0BFCA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicestrackLambdaFunction710B6130",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytrackApi92FAFA5B"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaytrackApiDeploymentStageprod4EE06132"
+       },
+       "/GET/track/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track.{deviceId}"
+   }
+  },
+  "ApiGatewaytrackApitrackdeviceIdGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackdeviceIdCA95B195": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicestrackLambdaFunction710B6130",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytrackApi92FAFA5B"
+       },
+       "/test-invoke-stage/GET/track/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track.{deviceId}"
+   }
+  },
+  "ApiGatewaytrackApitrackdeviceIdGET81C31EE1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicestrackLambdaFunction710B6130",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaytrackApitrackdeviceId5D24B948"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaytrackApi92FAFA5B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/Resource"
+   }
+  },
+  "ApiGatewaytestApi045F8452": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "Test Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Resource"
+   }
+  },
+  "ApiGatewaytestApiDeployment6A2F07A3b6f549e96e9df2dd77d53746bcb56253": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ApiGatewaytestApi045F8452"
+    }
+   },
+   "DependsOn": [
+    "ApiGatewaytestApitestcoordinatesPOST689CA1A6",
+    "ApiGatewaytestApitestcoordinates15DC9EF0",
+    "ApiGatewaytestApitest9A58CE12"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Deployment/Resource"
+   }
+  },
+  "ApiGatewaytestApiDeploymentStageprod40A38A82": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ApiGatewaytestApiDeployment6A2F07A3b6f549e96e9df2dd77d53746bcb56253"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaytestApi045F8452"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ApiGatewaytestApitest9A58CE12": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiGatewaytestApi045F8452",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "test",
+    "RestApiId": {
+     "Ref": "ApiGatewaytestApi045F8452"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/Resource"
+   }
+  },
+  "ApiGatewaytestApitestcoordinates15DC9EF0": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiGatewaytestApitest9A58CE12"
+    },
+    "PathPart": "coordinates",
+    "RestApiId": {
+     "Ref": "ApiGatewaytestApi045F8452"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/Resource"
+   }
+  },
+  "ApiGatewaytestApitestcoordinatesPOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06POSTtestcoordinates5C58DFFF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesIotTestClient9E506F1D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytestApi045F8452"
+       },
+       "/",
+       {
+        "Ref": "ApiGatewaytestApiDeploymentStageprod40A38A82"
+       },
+       "/POST/test/coordinates"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06.POST..test.coordinates"
+   }
+  },
+  "ApiGatewaytestApitestcoordinatesPOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06POSTtestcoordinates2FFDD1FA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MicroservicesIotTestClient9E506F1D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiGatewaytestApi045F8452"
+       },
+       "/test-invoke-stage/POST/test/coordinates"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06.POST..test.coordinates"
+   }
+  },
+  "ApiGatewaytestApitestcoordinatesPOST689CA1A6": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "MicroservicesIotTestClient9E506F1D",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiGatewaytestApitestcoordinates15DC9EF0"
+    },
+    "RestApiId": {
+     "Ref": "ApiGatewaytestApi045F8452"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/Resource"
+   }
+  },
+  "QueueTrackQueue9692FF45": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "QueueName": "TrackQueue",
+    "VisibilityTimeout": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Queue/TrackQueue/Resource"
+   }
+  },
+  "QueueTrackQueuePolicy7FB7045E": {
+   "Type": "AWS::SQS::QueuePolicy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:SendMessage"
+       ],
+       "Condition": {
+        "ArnEquals": {
+         "aws:SourceArn": {
+          "Fn::GetAtt": [
+           "LockeyEventBusTrackingLocationRule7A702889",
+           "Arn"
+          ]
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "events.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::GetAtt": [
+         "QueueTrackQueue9692FF45",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Queues": [
+     {
+      "Ref": "QueueTrackQueue9692FF45"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/Queue/TrackQueue/Policy/Resource"
+   }
+  },
+  "LockeyEventBus7540F85B": {
+   "Type": "AWS::Events::EventBus",
+   "Properties": {
+    "Name": "LockeyEventBus"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/LockeyEventBus/LockeyEventBus/Resource"
+   }
+  },
+  "LockeyEventBusTrackingLocationRule7A702889": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "Description": "When Location microservice track the location",
+    "EventBusName": {
+     "Ref": "LockeyEventBus7540F85B"
+    },
+    "EventPattern": {
+     "source": [
+      "com.lockey.location.trackLocation"
+     ],
+     "detail-type": [
+      "TrackLocation"
+     ]
+    },
+    "Name": "TrackingLocationRule",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "QueueTrackQueue9692FF45",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/LockeyEventBus/TrackingLocationRule/Resource"
+   }
+  },
+  "IotCoreLocationUpdateRuleA0125FF4": {
+   "Type": "AWS::IoT::TopicRule",
+   "Properties": {
+    "TopicRulePayload": {
+     "Actions": [
+      {
+       "Lambda": {
+        "FunctionArn": {
+         "Fn::GetAtt": [
+          "MicroserviceslocationLambdaFunction7C8C211F",
+          "Arn"
+         ]
+        }
+       }
+      }
+     ],
+     "AwsIotSqlVersion": "2016-03-23",
+     "RuleDisabled": false,
+     "Sql": "SELECT * FROM 'device/coordinates'"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/IotCore/LocationUpdateRule"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/2VS207DMAz9lr1nZhchxONWQEJiXFokHqe09Ua2Nil1sqmK+u/I6dqN8RKfY/l6nBlM725hOpJHGmf5flyoFHxiZbYX8khrnzdaliZPwX/KtEARbXQArShkmeZyrU2OO4LXYJ6czqwyWihZgo9NlxDsuylU1jDtUCtovpZEaAkWbATNYemyPdqlJDyVBx9t9FCVk7EuFRGzxwNqmxhXZ7iSVaX0lgP+e1shK7WVFo+yOczAf2GaGO6zqBRnsBl8sXEWz/RZW9zWsu9+Ra+CEyu3YeEALtuCfwnrxEh91x4+YFWYpkRt2XvB/lYTMVJYKojTk1OhDq/QfpucXR1qBf0Q+A+HLgR2ILznY1zQViBrR+CDhktHg56MY3e6puPrK2OB/4KpVNZ5hjnCNXno00XenK2c/TNqtNGR0bliIVvBXwh2dHOYTWB6D5PRjpQa105bVSLEnf0FCNELSKkCAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsLockeyServerlessMicroserviceStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "ApiGatewayWebSocketApiUrl941A47CB": {
+   "Description": "WebSocket API URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "wss://",
+      {
+       "Ref": "ApiGatewayLockeyWebSocketApi1BA94B24"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/prod"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "WebSocketApiUrl"
+   }
+  },
+  "ApiGatewaylocationApiEndpointDE2F3F22": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiGatewaylocationApi03E9C373"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiGatewaylocationApiDeploymentStageprod7E0B9596"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiGatewaydeviceApiEndpoint806B54C4": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiGatewaydeviceApi9AD61ADB"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiGatewaytrackApiEndpoint86CFCE78": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiGatewaytrackApi92FAFA5B"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiGatewaytrackApiDeploymentStageprod4EE06132"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiGatewaytestApiEndpointBE0CD757": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiGatewaytestApi045F8452"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiGatewaytestApiDeploymentStageprod40A38A82"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "IotCoreIotTopic38E5EFFC": {
+   "Description": "IoT Core topic for device coordinates",
+   "Value": "device/coordinates"
+  },
+  "IotEndpoint": {
+   "Description": "IoT Core endpoint",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "AWS::AccountId"
+      },
+      ".iot.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".amazonaws.com"
+     ]
+    ]
+   }
+  },
+  "WebSocketUrl": {
+   "Description": "WebSocket API URL",
+   "Value": ""
+  },
+  "IotTestClientFunction": {
+   "Description": "IoT Test Client Lambda function name",
+   "Value": {
+    "Ref": "MicroservicesIotTestClient9E506F1D"
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

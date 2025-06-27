@@ -1,0 +1,743 @@
+{
+  "version": "39.0.0",
+  "artifacts": {
+    "AwsLockeyServerlessMicroserviceStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AwsLockeyServerlessMicroserviceStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AwsLockeyServerlessMicroserviceStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "AwsLockeyServerlessMicroserviceStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/06f8c4188d7a9c4c9021a48290680ee6025d6bd5a60ac34dd962b706c8ab8597.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AwsLockeyServerlessMicroserviceStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AwsLockeyServerlessMicroserviceStack.assets"
+      ],
+      "metadata": {
+        "/AwsLockeyServerlessMicroserviceStack/Database/device": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "DatabasedeviceC292B687"
+            }
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/device/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DatabasedeviceC292B687"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/location": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "Databaselocation07F1849C"
+            }
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/location/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Databaselocation07F1849C"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/track": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "DatabasetrackD66F6DFE"
+            }
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/track/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DatabasetrackD66F6DFE"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/connections": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "Databaseconnections063A91AB"
+            }
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Database/connections/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Databaseconnections063A91AB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "If you are relying on AWS SDK v2 to be present in the Lambda environment already, please explicitly configure a NodeJS runtime of Node 16 or lower. [ack: @aws-cdk/aws-lambda-nodejs:sdkV2NotInRuntime]",
+            "trace": [
+              "Annotations.addMessage (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new Bundling (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/aws-cdk-lib/aws-lambda-nodejs/lib/bundling.js:1:3762)",
+              "Function.bundle (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/aws-cdk-lib/aws-lambda-nodejs/lib/bundling.js:1:1066)",
+              "new NodejsFunction (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/aws-cdk-lib/aws-lambda-nodejs/lib/function.js:1:2171)",
+              "LockeyMicroservices.createDeviceFunction (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/lib/microservice.ts:59:32)",
+              "new LockeyMicroservices (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/lib/microservice.ts:32:40)",
+              "new AwsLockeyServerlessMicroserviceStack (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/lib/aws-lockey-serverless-microservice-stack.ts:21:27)",
+              "Object.<anonymous> (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/bin/aws-lockey-serverless-microservice.ts:6:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1529:14)",
+              "Module.m._compile (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1613:10)",
+              "Object.require.extensions.<computed> [as .ts] (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1275:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1096:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)",
+              "phase4 (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/home/mino/Minoltan/AMI/aws/location-tracker-microservices-serverless/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1529:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1613:10)",
+              "Module.load (node:internal/modules/cjs/loader:1275:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1096:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesdeviceLambdaFunctionServiceRole2D77B8EA"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesdeviceLambdaFunctionServiceRoleDefaultPolicy484F0A51"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/deviceLambdaFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesdeviceLambdaFunction2A4DADA7"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceslocationLambdaFunctionServiceRole2F745FFD"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceslocationLambdaFunctionServiceRoleDefaultPolicy5D66E4AF"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceslocationLambdaFunction7C8C211F"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/locationLambdaFunction/IotInvokePermission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceslocationLambdaFunctionIotInvokePermission78000367"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicestrackLambdaFunctionServiceRoleAD3A11C9"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicestrackLambdaFunctionServiceRoleDefaultPolicy2262FF23"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicestrackLambdaFunction710B6130"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/trackLambdaFunction/SqsEventSource:AwsLockeyServerlessMicroserviceStackQueueTrackQueue1D83A741/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicestrackLambdaFunctionSqsEventSourceAwsLockeyServerlessMicroserviceStackQueueTrackQueue1D83A741E10FFEC2"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceswebSocketHandlerServiceRole47DC925D"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceswebSocketHandlerServiceRoleDefaultPolicy081297A1"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/webSocketHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroserviceswebSocketHandlerA94BCA16"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesIotTestClientServiceRoleCC97FEF4"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesIotTestClientServiceRoleDefaultPolicy17D3E926"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Microservices/IotTestClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MicroservicesIotTestClient9E506F1D"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApi1BA94B24"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/ConnectIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApiconnectRouteConnectIntegrationPermission3739D7E6"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/ConnectIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApiconnectRouteConnectIntegrationAED4084E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$connect-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApiconnectRoute6BD1C211"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/DisconnectIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidisconnectRouteDisconnectIntegrationPermissionF042766D"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/DisconnectIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidisconnectRouteDisconnectIntegration4F1A53FB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$disconnect-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidisconnectRoute20988EC9"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/DefaultIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidefaultRouteDefaultIntegrationPermission50768309"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/DefaultIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidefaultRouteDefaultIntegrationD382C121"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketApi/$default-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketApidefaultRoute6A548964"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/LockeyWebSocketStage/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLockeyWebSocketStage0BB2D50A"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/WebSocketApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayWebSocketApiUrl941A47CB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApi03E9C373"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApiDeployment9868A005cd40792604effa33da3d0c674572ca3c"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApiDeploymentStageprod7E0B9596"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApiEndpointDE2F3F22"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationBF0F2D24"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocation91F50779"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocation59935677"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationGET8A02AA3C"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationdeviceIdF3F64C2A"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationdeviceIdGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocationdeviceIdA9E4200C"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.GET..location.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationdeviceIdGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BGETlocationdeviceIdB5F71054"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/{deviceId}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationdeviceIdGET4A4E84FB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationtrackCA95F214"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationtrackdeviceIdFF52816E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.POST..location.track.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationtrackdeviceIdPOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BPOSTlocationtrackdeviceId3D4F2BA2"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93B.POST..location.track.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationtrackdeviceIdPOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaylocationApi3562C93BPOSTlocationtrackdeviceIdAE9DA46B"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/locationApi/Default/location/track/{deviceId}/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaylocationApilocationtrackdeviceIdPOST7BFC0001"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApi9AD61ADB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApiDeployment3CBF636E854e0ff4402117f6a1f13f0cf9b697ac"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApiDeploymentStageprod5C2C92EB"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApiEndpoint806B54C4"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceF4820717"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdevice9F66EF7D"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceEBE3E770"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceGETF4B3BFDF"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.POST..device": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApidevicePOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48POSTdevice7395DA34"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.POST..device": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApidevicePOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48POSTdeviceCDEEE94E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApidevicePOST2A88244E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceid37EF0CE4"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceid6AEA2B6E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.GET..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48GETdeviceidB81C87D8"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidGETDE2EEB5A"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.PUT..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidPUTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48PUTdeviceid6D404E49"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.PUT..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidPUTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48PUTdeviceidDDF09360"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidPUT9EE09469"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.DELETE..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidDELETEApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48DELETEdeviceid0A91FA61"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48.DELETE..device.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidDELETEApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaydeviceApi6991BA48DELETEdeviceidAE447646"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/deviceApi/Default/device/{id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaydeviceApideviceidDELETE342A0A4F"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApi92FAFA5B"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApiDeploymentA2A47FB42de7a24c9de662ca9651be30a04977e3"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApiDeploymentStageprod4EE06132"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApiEndpoint86CFCE78"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackD8B656BC"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackCD0D7A43"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackA7DF5789"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackGET5D34522A"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackdeviceId5D24B948"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackdeviceIdGETApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackdeviceIdBDE0BFCA"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80.GET..track.{deviceId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackdeviceIdGETApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytrackApi57664B80GETtrackdeviceIdCA95B195"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/trackApi/Default/track/{deviceId}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytrackApitrackdeviceIdGET81C31EE1"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApi045F8452"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApiDeployment6A2F07A3b6f549e96e9df2dd77d53746bcb56253"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApiDeploymentStageprod40A38A82"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApiEndpointBE0CD757"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApitest9A58CE12"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApitestcoordinates15DC9EF0"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/ApiPermission.AwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06.POST..test.coordinates": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApitestcoordinatesPOSTApiPermissionAwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06POSTtestcoordinates5C58DFFF"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/ApiPermission.Test.AwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06.POST..test.coordinates": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApitestcoordinatesPOSTApiPermissionTestAwsLockeyServerlessMicroserviceStackApiGatewaytestApi3355CA06POSTtestcoordinates2FFDD1FA"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/ApiGateway/testApi/Default/test/coordinates/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewaytestApitestcoordinatesPOST689CA1A6"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Queue/TrackQueue/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueueTrackQueue9692FF45"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/Queue/TrackQueue/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueueTrackQueuePolicy7FB7045E"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/LockeyEventBus/LockeyEventBus/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LockeyEventBus7540F85B"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/LockeyEventBus/TrackingLocationRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LockeyEventBusTrackingLocationRule7A702889"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/IotCore/LocationUpdateRule": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotCoreLocationUpdateRuleA0125FF4"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/IotCore/IotTopic": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotCoreIotTopic38E5EFFC"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/IotEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotEndpoint"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/WebSocketUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketUrl"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/IotTestClientFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotTestClientFunction"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AwsLockeyServerlessMicroserviceStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AwsLockeyServerlessMicroserviceStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

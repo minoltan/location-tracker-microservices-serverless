@@ -1,0 +1,8 @@
+{
+    "name": "@src/iot-test-client",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "@aws-sdk/client-iot-data-plane": "^3.830.0"
+    }
+}

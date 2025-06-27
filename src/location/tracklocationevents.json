@@ -1,0 +1,22 @@
+[
+    {
+      "Source": "com.lockey.location.trackLocation",
+      "Detail": "{ \"deviceId\": \"lockey\", \"location\": \"phone1\" }",
+      "Resources": [
+        "resource1",
+        "resource2"
+      ],
+      "DetailType": "TrackLocation",
+      "EventBusName": "LockeyEventBus"
+    },
+    {
+      "Source": "com.lockey.location.trackLocation",
+      "Detail": "{ \"deviceId\": \"lockey\", \"location\": \"phone2\" }",
+      "Resources": [
+        "resource1",
+        "resource2"
+      ],
+      "DetailType": "TrackLocation",
+      "EventBusName": "LockeyEventBus"
+    }
+]
