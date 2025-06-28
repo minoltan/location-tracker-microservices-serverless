@@ -2,8 +2,8 @@
 This project implements a scalable backend system for tracking IoT devices in real-time using AWS serverless architecture. The solution can connects mobile applications with IoT tracker devices, processes location data through AWS IoT Core, and provides real-time coordinates via a serverless microservice architecture.
 
 ## TABLE OF CONTENTS
-1. [Key Features](#FEATURES) 
-2. [Technical Stack](#STACK)
+1. [Features](#FEATURES) 
+2. [Stack](#STACK)
 3. [Architecture](#ARCHITECTURE)
 4. [Setup](#SETUP)
 5. [Personalization](#PERSONALIZATION)
@@ -36,12 +36,73 @@ This project implements a scalable backend system for tracking IoT devices in re
 ## ARCHITECTURE
 **Device Connection**
 ![connection](public/readme/connect.png)<br />
+1. Device (Mobile App) Connects via WebSocket:
+
+- Path: ```/device/connect```
+
+- A client (e.g. mobile or web app) initiates a WebSocket connection.
+
+-  The WebSocket gateway triggers the ```connectDevice``` Lambda function, which:
+
+
+2. IoT Device Sends Coordinates:
+
+- The Location Tracker (e.g. GPS-enabled IoT device) sends location data to AWS IoT Core.
+
+- IoT Core matches incoming messages with Message Routing Rules, which trigger:
+
+
+3. Client Receives Updates:
+
+- The WebSocket client receives live location updates pushed from the backend.
+
+4. For Testing purpose , you can use the following API to send fake location data:
+- Path: ```/test/coordinates```
 
 **Device Data**
 ![device](public/readme/device.png)<br />
 
+1. Exposes CRUD APIs to manage registered devices.
+
+2. REST API Gateway exposing 4 endpoints:
+
+- ```POST /device``` – Registers a device (payload includes device info).
+
+- ```GET /device``` – Retrieves all registered devices.
+
+- ```GET /device/{deviceId}``` – Retrieves a single device’s data.
+
+- ```DELETE /device/{deviceId}``` – Deletes a device.
+
+3. All routes trigger the ```deviceMicroservice``` Lambda function 
+4. Device records are stored in a DynamoDB ```device``` table.
+
 **Location Track Data**
 ![location track](public/readme/location-track.png)<br />
+
+1. Handles tracking and location events, and supports event-driven processing via SQS & EventBridge.
+2. Location Retrieval & Tracking APIs:
+- ```GET /location/{deviceId}?time``` – Fetch historical location data from location table via ```locationMicroservice```.
+- ```POST /location/track``` – Submits new location data to ```locationMicroservice```.
+
+3. Track Events:
+- ```locationMicroservice``` stores the location data in the ```location``` table.
+- It then emits a track event, which is pushed to EventBridge.
+
+4. Event-Driven Tracking:
+- EventBridge routes the event to an SQS Queue.
+- ```trackMicroservice``` Lambda is triggered via the queue.
+- It processes the event and stores it in the ```track``` table for auditing or analytics.
+
+5. Track Query APIs:
+- ```GET /track``` – Fetch all track records.
+- ```GET /track/{device-id}?time``` – Fetch specific track history for a device.
+
+**Road Map Plan**
+![track prediction](public/readme/roadmap.png)<br />
+- AI-based device location prediction system using Amazon Bedrock (for generating contextual insights) and Amazon SageMaker (for prediction using a model, possibly with reinforcement learning later).
+
+
 
 # Welcome to your CDK TypeScript project
 
@@ -71,7 +132,6 @@ add a notion doc
 
 ## Postman collection
 
-## Creeate & Update Github repo
 
 ## AI - Device predicition --- LLM | sagemaker
 ## AI - bettery saver recomendation | sagemaker
