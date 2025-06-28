@@ -6,10 +6,9 @@ This project implements a scalable backend system for tracking IoT devices in re
 2. [Stack](#STACK)
 3. [Architecture](#ARCHITECTURE)
 4. [Setup](#SETUP)
-5. [Personalization](#PERSONALIZATION)
-6. [Tips](#TIPS)
-7. [Deployment](#DEPLOYMENT)
-8. [Install as a Mobile App](#PWA)
+5. [Deployment](#DEPLOYMENT)
+6. [Demo](#DEMO)
+8. [Test](#TEST)
 9. [Author](#AUTHOR)
 
 
@@ -22,7 +21,7 @@ This project implements a scalable backend system for tracking IoT devices in re
 - **Scalable Architecture**: Cloud-native design using AWS serverless components
 - **Easy Deployment**: Minutes of Deployment using CDK 
 
-## Technical Stack
+## STACK
 
 - <img src="https://img.shields.io/badge/AWS_IoT_Core-326304?style=flat&logo=amazon-aws&logoColor=white" alt="AWS IoT Core"> - Device management and secure MQTT communication  
 - <img src="https://img.shields.io/badge/AWS_Lambda-FF9900?style=flat&logo=awslambda&logoColor=white" alt="AWS Lambda"> - Serverless functions for real-time data processing  
@@ -102,37 +101,22 @@ This project implements a scalable backend system for tracking IoT devices in re
 ![track prediction](public/readme/roadmap.png)<br />
 - AI-based device location prediction system using Amazon Bedrock (for generating contextual insights) and Amazon SageMaker (for prediction using a model, possibly with reinforcement learning later).
 
+## SETUP
 
+## DEPLOYMENT
 
-# Welcome to your CDK TypeScript project
-
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* ```npm run build```   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
-
-
-## Cofigure AWS
-use access key & secret key to configure aws
+## DEMO
 
 
 
-## Requirement documentation
-add a notion doc
+## TEST
+You can test the APIs using the Postman collection:
 
-## Demo Video URL
+[Download Postman Collection](postman/location-tracker.postman_collection.json)
 
-## Postman collection
-
-
-## AI - Device predicition --- LLM | sagemaker
-## AI - bettery saver recomendation | sagemaker
-## AI - Chat bot
+## AUTHOR   
+![Minoltan Logo](public/readme/author.png)<br />
+[Minoltan Issack](www.linkedin.com/in/minoltan)<br />
+Senior Softare Engineer<br />
+B.Sc. (Hons) in Software Engineering<br />
+University of Kelaniya

@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "41048453-1ee1-4839-bfaa-c9f39be05893",
+		"name": "location-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25755668",
+		"_collection_link": "https://solar-rocket-857681.postman.co/workspace/AMI-SMART~bfa6435a-af74-42e7-b8ab-4b48b1d4ee37/collection/25755668-41048453-1ee1-4839-bfaa-c9f39be05893?action=share&source=collection_link&creator=25755668"
+	},
+	"item": [
+		{
+			"name": "mock-coordinates",
+			"item": [
+				{
+					"name": "generate-coordinates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{mock-coordinate-url}}/{{stage}}/test/coordinates?deviceId=9b0d6123-9b69-4e1e-8490-36da71f95cac",
+							"host": [
+								"{{mock-coordinate-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"test",
+								"coordinates"
+							],
+							"query": [
+								{
+									"key": "deviceId",
+									"value": "9b0d6123-9b69-4e1e-8490-36da71f95cac"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "device microservice",
+			"item": [
+				{
+					"name": "device",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Room Key\",\n    \"category\": \"key\",\n    \"code\": \"ACuSw34\",\n    \"data\" : 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{device-url}}/{{stage}}/device",
+							"host": [
+								"{{device-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "device",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bag Key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{device-url}}/{{stage}}/device/79f4a6c0-9f2a-4160-a34d-d8488b3601e6",
+							"host": [
+								"{{device-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"device",
+								"79f4a6c0-9f2a-4160-a34d-d8488b3601e6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "devices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{device-url}}/{{stage}}/device",
+							"host": [
+								"{{device-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deviceById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{device-url}}/{{stage}}/device/79f4a6c0-9f2a-4160-a34d-d8488b3601e6",
+							"host": [
+								"{{device-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"device",
+								"79f4a6c0-9f2a-4160-a34d-d8488b3601e6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "device",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Car Key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{device-url}}/{{stage}}/device/174b6cbb-f8d6-4b1b-a360-67ed38ae3641",
+							"host": [
+								"{{device-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"device",
+								"174b6cbb-f8d6-4b1b-a360-67ed38ae3641"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "location microservice",
+			"item": [
+				{
+					"name": "location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{location-url}}/{{stage}}/location",
+							"host": [
+								"{{location-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "locationBydeviceId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{location-url}}/{{stage}}/location/9b0d6123-9b69-4e1e-8490-36da71f95cac?timestamp=2025-06-22T06:00:00.000Z&limit=10",
+							"host": [
+								"{{location-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"location",
+								"9b0d6123-9b69-4e1e-8490-36da71f95cac"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "2025-06-22T06:00:00.000Z"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "location track",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deviceId\": \"9b0d6123-9b69-4e1e-8490-36da71f95cac\",\n    \"timestamp\": \"2025-06-21T06:00:00.000Z\",\n    \"limit\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{location-url}}/{{stage}}/location/track?limit=5&timestamp=2025-06-22T06:00:00.000Z",
+							"host": [
+								"{{location-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"location",
+								"track"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "timestamp",
+									"value": "2025-06-22T06:00:00.000Z"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "track microservice",
+			"item": [
+				{
+					"name": "track",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{track-url}}/{{stage}}/track",
+							"host": [
+								"{{track-url}}"
+							],
+							"path": [
+								"{{stage}}",
+								"track"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trackByDeviceIdAndDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{track-url}}/track/9464b4f-5a15-433c-ac74-065830446093?trackDate=2025-04-26T02:15:39.125Z",
+							"host": [
+								"{{track-url}}"
+							],
+							"path": [
+								"track",
+								"9464b4f-5a15-433c-ac74-065830446093"
+							],
+							"query": [
+								{
+									"key": "trackDate",
+									"value": "2025-04-26T02:15:39.125Z"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
