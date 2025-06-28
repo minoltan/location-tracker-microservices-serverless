@@ -103,6 +103,31 @@ This project implements a scalable backend system for tracking IoT devices in re
 
 ## SETUP
 
+### AWS Cost Management & Good Practices
+1. Use the AWS Free Tier Wisely: AWS gives you many services for free up to certain limits (some forever, some for 12 months). This is great for learning and building small apps without paying. Always check your usage to stay within these free limits using tools like the Cost Management Dashboard.
+
+2. "Turn Off the Lights": If you're not using AWS resources (like servers or databases), shut them down or delete them. Just like turning off lights when you leave a room, this saves money. The AWS CDK helps a lot: cdk deploy builds your app, and cdk destroy easily removes everything, preventing unexpected costs.
+
+3. Keep Your Account Secure: Never share your AWS account details or passwords. If someone else gets access, they could create expensive resources on your account without you knowing.
+
+4. Minimize the use of your powerful AWS root account. Instead, create and use IAM users with specific, limited permissions for all your regular AWS activities to significantly enhance the security of your cloud environment.
+
+### Prerequisites 
+1. **[Need AWS Account with programatic access](https://docs.aws.amazon.com/keyspaces/latest/devguide/access.credentials.IAM.html)** 
+2. **[AWS CLI Install](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)**
+3. **[AWS CLI Quick Setup](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)**
+4. **[AWS CLI Configuration and credential file settings](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)**
+5. **[Node.js](https://nodejs.org/en/)**
+**This is a crucial prerequisite for two reasons:**
+- It's required for running AWS CDK (Cloud Development Kit) applications.
+- Your AWS Lambda functions will be developed using Node.js.
+6. **[AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/home.html)**
+- ```npm install -g aws-cdk```
+7. **[Working with the AWS CDK in TypeScript](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html)**
+8. **[IDE (Visual Studio Code)](https://code.visualstudio.com/)**
+
+
+
 ## DEPLOYMENT
 
 ## DEMO
@@ -117,6 +142,6 @@ You can test the APIs using the Postman collection:
 ## AUTHOR   
 ![Minoltan Logo](public/readme/author.png)<br />
 [Minoltan Issack](www.linkedin.com/in/minoltan)<br />
-Senior Softare Engineer<br />
+Senior Software Engineer<br />
 B.Sc. (Hons) in Software Engineering<br />
 University of Kelaniya
