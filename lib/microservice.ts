@@ -5,6 +5,8 @@ import { Construct } from "constructs";
 import { join } from "path";
 import { Stack } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
 
 
 interface LockeyMicroservicesProps {
@@ -22,6 +24,7 @@ export class LockeyMicroservices extends Construct {
     public readonly trackMicroservice: NodejsFunction;
     public readonly webSocketHandler: NodejsFunction;
     public readonly iotTestClient: NodejsFunction;
+    public readonly statusChangeHandler: NodejsFunction;
 
 
     constructor(scope: Construct, id: string, props: LockeyMicroservicesProps) {
@@ -38,6 +41,8 @@ export class LockeyMicroservices extends Construct {
         this.webSocketHandler = this.createWebSocketHandler(props);
         // IoT Test Client
         this.iotTestClient = this.createIotTestClient(props.connectionsTable);
+        // Stream for track request and updates
+        this.statusChangeHandler = this.createStatusChangeHandler(props.trackTable, props.connectionsTable);
     }
 
 
@@ -179,5 +184,66 @@ export class LockeyMicroservices extends Construct {
 
 
         return iotTestClient;
+    }
+
+    private createStatusChangeHandler(trackTable: ITable, connectionsTable: ITable): NodejsFunction {
+        const handlerProps: NodejsFunctionProps = {
+            bundling: {
+                externalModules: [
+                    'aws-sdk',
+                ],
+            },
+            environment: {
+                TABLE_NAME: trackTable.tableName,
+                CONNECTIONS_TABLE: connectionsTable.tableName,            
+                PRIMARY_KEY: 'deviceId' 
+            },
+            runtime: Runtime.NODEJS_20_X,
+        };
+
+        const handler = new NodejsFunction(this, 'StatusChangeHandler', {
+            entry: 'src/track/status-change-handler.ts',
+            ...handlerProps,
+        });
+
+        // Grant permissions
+        trackTable.grantStreamRead(handler);
+        connectionsTable.grantReadWriteData(handler);
+
+        // Add WebSocket API management permissions
+        handler.addToRolePolicy(new iam.PolicyStatement({
+            actions: ['execute-api:ManageConnections'],
+            resources: [
+                `arn:aws:execute-api:${Stack.of(this).region}:${Stack.of(this).account}:*/*/*/@connections/*`
+            ],
+        }));
+
+        // Add DynamoDB permissions for connection management
+        handler.addToRolePolicy(new iam.PolicyStatement({
+            actions: [
+                'dynamodb:GetItem',
+                'dynamodb:DeleteItem'
+            ],
+            resources: [connectionsTable.tableArn]
+        }));
+
+        // Event source mapping
+        handler.addEventSource(new DynamoEventSource(trackTable, {
+            startingPosition: StartingPosition.LATEST,
+            batchSize: 10,
+            retryAttempts: 3,
+            filters: [{
+                pattern: JSON.stringify({
+                    eventName: ["INSERT", "MODIFY"],
+                    dynamodb: {
+                        NewImage: {
+                            status: { "S": [{ "exists": true }] }
+                        }
+                    }
+                }),
+            }],
+        }));
+
+        return handler;
     }
 }

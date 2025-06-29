@@ -112,6 +112,8 @@ This project implements a scalable backend system for tracking IoT devices in re
 
 4. Minimize the use of your powerful AWS root account. Instead, create and use IAM users with specific, limited permissions for all your regular AWS activities to significantly enhance the security of your cloud environment.
 
+**Note: Maintain the granular access and policies for all AWS resources to prevent unauthorized access and ensure the security of your AWS account. Here I used all access for the sake of simplicity.**
+
 ### Prerequisites 
 1. **[Need AWS Account with programatic access](https://docs.aws.amazon.com/keyspaces/latest/devguide/access.credentials.IAM.html)** 
 2. **[AWS CLI Install](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)**

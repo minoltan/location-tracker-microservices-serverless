@@ -3,7 +3,7 @@ import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ddbClient } from "../shared/ddbClient";
 import { ebClient } from "./eventBridgeClient";
 import { PutEventsCommand } from "@aws-sdk/client-eventbridge";
-const { ApiGatewayManagementApi } = require('@aws-sdk/client-apigatewaymanagementapi');
+import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 
 
 exports.handler = async function (event) {

@@ -1,6 +1,7 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, ITable, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
+import { StreamViewType } from "aws-cdk-lib/aws-dynamodb";
 
 export class LockeyDatabase extends Construct {
 
@@ -64,7 +65,8 @@ export class LockeyDatabase extends Construct {
           },
           tableName: 'track',
           removalPolicy: RemovalPolicy.DESTROY,
-          billingMode: BillingMode.PAY_PER_REQUEST
+          billingMode: BillingMode.PAY_PER_REQUEST,
+          stream: StreamViewType.NEW_AND_OLD_IMAGES
       });
       return trackTable;
     }

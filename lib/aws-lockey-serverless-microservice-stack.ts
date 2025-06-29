@@ -71,6 +71,11 @@ export class AwsLockeyServerlessMicroserviceStack extends Stack {
         apigateway.webSocketApiEndpoint
     );
 
+    microservices.statusChangeHandler.addEnvironment(
+       'WEBSOCKET_API_ENDPOINT', 
+        apigateway.webSocketApiEndpoint
+    )
+
   }
 
 

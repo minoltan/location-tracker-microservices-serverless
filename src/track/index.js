@@ -75,7 +75,7 @@ const createTrack = async (locationTrackEvent) => {
       const result = await Promise.race([
         ddbClient.send(new PutItemCommand(params)),
         new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("DynamoDB PutItem timed out")), 5000)
+          setTimeout(() => reject(new Error("DynamoDB PutItem timed out")), 10000)
         )
       ]);
       console.log("PutItem response:", result);
@@ -84,7 +84,6 @@ const createTrack = async (locationTrackEvent) => {
       console.error("PutItem failed or timed out:", err);
       throw err;
     }
-    return createResult;
 
   } catch (e) {
     console.error(e);
